@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hiring Problem — Algorithm Simulator</title>
+<meta name="description" content="Interactive simulator for the classic Hiring Problem from CLRS — probabilistic analysis, Monte Carlo simulation, and step-by-step visualization.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">HIRE//ALGO</div>
+  <ul class="nav-links">
+    <li><a href="#simulator">Simulator</a></li>
+    <li><a href="#theory">Theory</a></li>
+    <li><a href="#pseudocode">Algorithm</a></li>
+    <li><a href="https://github.com/YOUR_USERNAME/hiring-problem" target="_blank" rel="noopener">GitHub ↗</a></li>
+  </ul>
+  <div class="nav-badge">CLRS § 5.1</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle c1"></div>
+  <div class="hero-bg-circle c2"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Algorithm Analysis</div>
+      <h1 class="hero-title">The<br><span class="line2">Hiring</span><br>Problem</h1>
+      <p class="hero-desc">
+        You need to hire the best engineer. An agency sends one candidate per day — you interview them, compare, and decide. Every hire costs money. What's the expected price of always hiring the best?
+      </p>
+      <div class="hero-cta">
+        <a href="#simulator" class="btn-primary">Run Simulation →</a>
+        <a href="#theory" class="btn-secondary">See the Math</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-cards">
+        <div class="fcard c1">
+          <div class="fcard-name">Candidate #7</div>
+          <div class="fcard-row"><span>Score</span><span>87/100</span></div>
+          <div class="fcard-row"><span>Day</span><span>3</span></div>
+          <div class="fcard-status status-hired">✓ Hired</div>
+        </div>
+        <div class="fcard c2">
+          <div class="fcard-name">Candidate #12</div>
+          <div class="fcard-row"><span>Score</span><span>94/100</span></div>
+          <div class="fcard-row"><span>Day</span><span>8</span></div>
+          <div class="fcard-status status-best">★ Current best</div>
+        </div>
+        <div class="fcard c3">
+          <div class="fcard-name">Candidate #3</div>
+          <div class="fcard-row"><span>Score</span><span>54/100</span></div>
+          <div class="fcard-row"><span>Day</span><span>1</span></div>
+          <div class="fcard-status status-passed">Passed over</div>
+        </div>
+        <div class="fcard c4">
+          <div class="fcard-name">Agency Cost</div>
+          <div class="fcard-row"><span>Interviews</span><span>$120</span></div>
+          <div class="fcard-row"><span>Hires</span><span>$400</span></div>
+          <div class="fcard-row"><span><strong>Total</strong></span><span class="accent-text"><strong>$520</strong></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS ROW -->
+<div class="stats-row">
+  <div class="stat-cell">
+    <div class="stat-num">O(n)</div>
+    <div class="stat-label">Interview complexity</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">ln n</div>
+    <div class="stat-label">Expected hires</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">H(n)</div>
+    <div class="stat-label">Harmonic number</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">1/k</div>
+    <div class="stat-label">Prob. hire at step k</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">The greedy strategy</h2>
+  <p class="section-sub">One candidate per day. One rule: always keep the best. Simple in theory — but what does it cost?</p>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon y">📋</div>
+      <div class="step-title">Interview</div>
+      <p class="step-desc">Agency sends one candidate each day. You always pay the interview fee c<sub>i</sub> — no matter what. This cost is unavoidable: n × c<sub>i</sub> total.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon b">⚡</div>
+      <div class="step-title">Compare &amp; decide</div>
+      <p class="step-desc">If the new candidate outscores everyone you've seen so far, you fire the current hire and pay the hire fee c<sub>h</sub>. You're committed to always having the best.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon r">💰</div>
+      <div class="step-title">Count the cost</div>
+      <p class="step-desc">Total cost = n·c<sub>i</sub> + (# hires)·c<sub>h</sub>. With random ordering, expected hires ≈ H(n) ≈ ln(n). A logarithmic bound — much better than worst case.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SIMULATOR -->
+<div id="simulator" class="section" style="padding-top:0">
+  <div class="section-label">Interactive</div>
+  <h2 class="section-title">Live simulator</h2>
+  <p class="section-sub">Tune the parameters, run Monte Carlo analysis, or step through a single candidate sequence day by day.</p>
+
+  <div class="sim-container">
+    <div class="sim-topbar">
+      <div class="dot r"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+      <div class="sim-title-bar">hiring-problem-sim.js — running</div>
+    </div>
+    <div class="sim-body">
+
+      <div class="controls-grid">
+        <div class="ctrl">
+          <div class="ctrl-label">Candidates (n) <span class="ctrl-val" id="nVal">20</span></div>
+          <input type="range" min="5" max="100" value="20" id="nSlider" step="1">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Interview cost c<sub>i</sub> <span class="ctrl-val" id="ciVal">$10</span></div>
+          <input type="range" min="1" max="100" value="10" id="ciSlider" step="1">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Hire cost c<sub>h</sub> <span class="ctrl-val" id="chVal">$100</span></div>
+          <input type="range" min="50" max="1000" value="100" id="chSlider" step="10">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Monte Carlo runs <span class="ctrl-val" id="simVal">500</span></div>
+          <input type="range" min="100" max="3000" value="500" id="simSlider" step="100">
+        </div>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-label">Simulated avg hires</div>
+          <div class="metric-value accent" id="mHires">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Expected total cost</div>
+          <div class="metric-value red" id="mCost">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Theory E[hires] = H(n)</div>
+          <div class="metric-value blue" id="mTheory">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Worst case cost</div>
+          <div class="metric-value muted" id="mWorst">—</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="sim-btn primary" id="btnMC">▶ Run Monte Carlo</button>
+        <button class="sim-btn secondary" id="btnStep">Step → Next candidate</button>
+        <button class="sim-btn secondary" id="btnAll">Skip to end</button>
+        <button class="sim-btn secondary" id="btnReset">↺ Reset</button>
+      </div>
+
+      <div class="stream-section">
+        <div class="stream-label">Candidate stream — day by day</div>
+        <div class="stream" id="stream"></div>
+      </div>
+
+      <div class="log-section">
+        <div class="stream-label">Event log</div>
+        <div class="log" id="log">
+          <span class="log-empty">Press "Run Monte Carlo" or step through candidates...</span>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-title">Cost distribution — Monte Carlo histogram</div>
+          <div class="chart-wrap">
+            <canvas id="distChart" role="img" aria-label="Histogram of total hiring costs across Monte Carlo simulations">Run simulation to see distribution.</canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">E[hires] vs n — theory vs simulation</div>
+          <div class="chart-wrap">
+            <canvas id="harmChart" role="img" aria-label="Line chart comparing H(n) and simulated expected hires as n grows">Run simulation to see comparison.</canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- THEORY -->
+<div id="theory" class="section">
+  <div class="section-label">Mathematical Analysis</div>
+  <h2 class="section-title">The probabilistic argument</h2>
+  <p class="section-sub">Why does random order make this problem tractable? Indicator random variables give us the clean answer.</p>
+
+  <div class="theory-grid">
+    <div>
+      <div class="formula-block">
+        <h4>Indicator random variables</h4>
+        <div class="formula">
+          Let <code>Xᵢ = 1</code> if candidate <code>i</code> is hired.<br>
+          Candidate <code>i</code> is hired iff they are the best among the first <code>i</code> candidates.<br><br>
+          Under a uniformly random permutation:<br>
+          <code>Pr[Xᵢ = 1] = 1/i</code><br><br>
+          By linearity of expectation:<br>
+          <code>E[X] = Σᵢ₌₁ⁿ E[Xᵢ] = Σᵢ₌₁ⁿ 1/i = H(n)</code>
+        </div>
+      </div>
+      <div class="formula-block">
+        <h4>Total expected cost</h4>
+        <div class="formula">
+          Interview all <code>n</code> candidates (always):<br>
+          <code>+ n · cᵢ</code><br><br>
+          Expected hiring cost:<br>
+          <code>+ cₕ · H(n)</code><br><br>
+          Where <code>H(n) = ln n + γ + O(1/n)</code><br>
+          and γ ≈ 0.5772 (Euler–Mascheroni constant)<br><br>
+          <strong class="accent-text">E[cost] = n·cᵢ + cₕ·ln n</strong>
+        </div>
+      </div>
+    </div>
+    <div class="complexity-cards">
+      <div class="complexity-card best">
+        <div class="cc-head">
+          <div class="cc-name">Best case</div>
+          <div class="cc-tag y">O(n·cᵢ + cₕ)</div>
+        </div>
+        <div class="cc-desc">Only one hire: the very first candidate is the global best. You pay n interviews and one hire fee. Happens when the first candidate turns out to be rank #1.</div>
+      </div>
+      <div class="complexity-card worst">
+        <div class="cc-head">
+          <div class="cc-name">Worst case</div>
+          <div class="cc-tag r">O(n·cₕ)</div>
+        </div>
+        <div class="cc-desc">Candidates arrive in strictly ascending order of quality — you hire every single person. Cost = n·cᵢ + n·cₕ. The nightmare scenario for HR.</div>
+      </div>
+      <div class="complexity-card expected">
+        <div class="cc-head">
+          <div class="cc-name">Expected case</div>
+          <div class="cc-tag b">O(n·cᵢ + cₕ·ln n)</div>
+        </div>
+        <div class="cc-desc">Under random input permutation, expected hires is H(n) ≈ ln(n). Even for n = 1,000,000 you only expect ~14 hires.</div>
+      </div>
+      <div class="complexity-card">
+        <div class="cc-head">
+          <div class="cc-name">Randomized algorithm</div>
+          <div class="cc-tag b">Always O(cₕ·ln n)</div>
+        </div>
+        <div class="cc-desc">Pre-permute candidates randomly. Now the expected bound holds regardless of adversarial input. This is the power of randomization.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PSEUDOCODE -->
+<div id="pseudocode" class="section" style="padding-top:0">
+  <div class="section-label">Algorithm</div>
+  <h2 class="section-title">Pseudocode</h2>
+  <p class="section-sub">The complete algorithm, as presented in CLRS Chapter 5. Deceptively simple — the complexity is in the analysis.</p>
+
+  <div class="pseudo">
+    <span class="ln"><span class="fn">HIRE-ASSISTANT</span>(n)</span>
+    <span class="ln"><span class="cm">// Input: n candidates ranked 1..n (1=worst, n=best)</span></span>
+    <span class="ln"><span class="cm">// Candidates arrive in random order (or pre-permuted)</span></span>
+    <span class="ln"></span>
+    <span class="ln indent1">best ← <span class="num">0</span>  <span class="cm">// candidate 0 is a least-qualified sentinel</span></span>
+    <span class="ln indent1"><span class="kw">for</span> i ← <span class="num">1</span> <span class="kw">to</span> n</span>
+    <span class="ln indent2"><span class="cm">// Pay interview cost c_i (always)</span></span>
+    <span class="ln indent2">interview candidate i</span>
+    <span class="ln indent2"><span class="kw">if</span> candidate i is better than candidate best</span>
+    <span class="ln indent3">best ← i</span>
+    <span class="ln indent3"><span class="cm">// Pay hire cost c_h, fire previous best</span></span>
+    <span class="ln indent3">hire candidate i</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">HIRE//ALGO</div>
+    <div class="footer-copy">Based on CLRS Chapter 5 · Probabilistic Analysis · Randomized Algorithms</div>
+    <div class="footer-links">
+      <a href="#simulator">Simulator</a>
+      <a href="#theory">Theory</a>
+      <a href="#pseudocode">Algorithm</a>
+      <a href="https://github.com/YOUR_USERNAME/hiring-problem" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="js/simulator.js"></script>
+</body>
+</html>
